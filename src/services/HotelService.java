@@ -1,7 +1,5 @@
 package services;
-public class HotelService {
+public interface HotelService {
 
-    public void show(){
-        System.out.println("HotelService");
-    }
+   
 }

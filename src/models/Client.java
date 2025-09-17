@@ -13,14 +13,18 @@ public class Client {
     private boolean isConnected = false;
     private boolean isAdmin = false;
 
-    public Client(String firstName, String lastName, String email, String password, boolean isConnected, boolean isAdmin){
+    public Client(String firstName, String lastName, String email, String password, boolean isConnected){
+        this.id = UUID.randomUUID();
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.isConnected = isConnected;
+    }
+    public Client(String firstName, String lastName, String email, String password, boolean isConnected, boolean isAdmin) {
+        this(firstName, lastName, email, password, isConnected);
         this.isAdmin = isAdmin;
-        this.id = UUID.randomUUID();
+
     }
 
     public UUID getid(){
