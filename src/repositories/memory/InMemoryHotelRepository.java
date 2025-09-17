@@ -21,8 +21,4 @@ public class InMemoryHotelRepository implements HotelRepository {
         return new ArrayList(hotels.values());
     }
 
-
-
-
-
 }
