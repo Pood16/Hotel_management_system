@@ -1,9 +1,5 @@
 package repositories.memory;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.UUID;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 
 import models.Hotel;
 import repositories.HotelRepository;
@@ -17,8 +13,18 @@ public class InMemoryHotelRepository implements HotelRepository {
     };
 
     @Override
+    public Optional<Hotel> findById(UUID id){
+        return hotels.values().stream().filter(h -> h.getid().equals(id)).findFirst();
+    };
+
+    @Override
     public List<Hotel> listAllHotels(){
-        return new ArrayList(hotels.values());
+        return new ArrayList<>(hotels.values());
+    }
+
+    @Override
+    public void delete(UUID id){
+        hotels.remove(id);
     }
 
 }

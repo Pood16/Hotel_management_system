@@ -12,6 +12,7 @@ public interface ClientRepository {
     Optional<Client> findById(UUID id);
     Optional<Client> findByEmail(String email);
     List<Client> listAllUsers();
+
 }
 
 

@@ -1,9 +1,5 @@
 package repositories.memory;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.UUID;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 
 import models.Client;
 import repositories.ClientRepository;
@@ -17,9 +13,25 @@ public class InMemoryClientRepository implements ClientRepository {
     };
 
     @Override
+    public Optional<Client> findById(UUID id){
+        return users.values().stream().filter(c -> c.getid().equals(id)).findFirst();
+    }
+
+    @Override
+    public Optional<Client> findByEmail(String email){
+        return users.values().stream().filter(c -> c.getEmail().equals(email)).findFirst();
+    }
+
+    @Override
     public List<Client> listAllUsers(){
         return new ArrayList<>(users.values());
     }
+
+
+
+
+
+
 
 
    
