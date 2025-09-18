@@ -10,8 +10,8 @@ public class Reservation {
     private UUID clientId;
     private int nights;
 
-    public Reservation(UUID id, Instant timestamp, String hotelId, UUID clientId, int nights) {
-        this.id = id;
+    public Reservation(Instant timestamp, String hotelId, UUID clientId, int nights) {
+        this.id = UUID.randomUUID();
         this.timestamp = timestamp;
         this.hotelId = hotelId;
         this.clientId = clientId;

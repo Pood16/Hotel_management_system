@@ -5,16 +5,16 @@ import models.Hotel;
 import repositories.HotelRepository;
 
 public class InMemoryHotelRepository implements HotelRepository {
-    Map<UUID, Hotel> hotels = new HashMap<>();
+    Map<String, Hotel> hotels = new HashMap<>();
 
     @Override
     public void saveHotel(Hotel hotel){
-        hotels.put(hotel.getid(), hotel);
+        hotels.put(hotel.getId(), hotel);
     };
 
     @Override
-    public Optional<Hotel> findById(UUID id){
-        return hotels.values().stream().filter(h -> h.getid().equals(id)).findFirst();
+    public Optional<Hotel> findById(String id){
+        return hotels.values().stream().filter(h -> h.getId().equals(id)).findFirst();
     };
 
     @Override
@@ -23,7 +23,7 @@ public class InMemoryHotelRepository implements HotelRepository {
     }
 
     @Override
-    public void delete(UUID id){
+    public void delete(String id){
         hotels.remove(id);
     }
 

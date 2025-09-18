@@ -6,9 +6,6 @@ import repositories.ClientRepository;
 
 public class InMemoryClientRepository implements ClientRepository {
     Map<UUID, Client> users = new HashMap<>();
-
-
-
     
     @Override
     public void saveUser(Client client){

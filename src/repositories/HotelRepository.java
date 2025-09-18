@@ -8,7 +8,7 @@ import models.Hotel;
 
 public interface HotelRepository {
     void saveHotel(Hotel hotel);
-    Optional<Hotel> findById(UUID id);
+    Optional<Hotel> findById(String id);
     List<Hotel> listAllHotels();
-    void delete(UUID id);
+    void delete(String id);
 }

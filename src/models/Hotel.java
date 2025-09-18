@@ -3,15 +3,17 @@ package models;
 import java.util.UUID;
 
 public class Hotel {
-    private UUID id;
+    private String id;
     private String name;
     private String address;
-    private int availableRooms = 0;
+    private int availableRooms;
     private double rate;
     private boolean isAvailable = false;
 
+
+
     public Hotel(String name, String address, int availableRooms, boolean isAvailable, double rate ){
-        this.id = UUID.randomUUID();
+        this.id = UUID.randomUUID().toString();
         this.name = name;
         this.address = address;
         this.availableRooms = availableRooms;
@@ -19,23 +21,23 @@ public class Hotel {
         this.rate = rate;
     };
 
-    public UUID getid() {
+    public String getId() {
         return id;
     }
 
-    public String getname() {
+    public String getName() {
         return name;
     }
 
-    public void setname(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public String getaddress() {
+    public String getAddress() {
         return address;
     }
 
-    public void setaddress(String address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 
