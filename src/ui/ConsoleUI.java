@@ -18,6 +18,7 @@ import services.implementation.ReservationServiceImplementation;
 import utils.ConsoleInput;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 public class ConsoleUI {
@@ -28,38 +29,40 @@ public class ConsoleUI {
     private Client currentUser;
 
     public ConsoleUI() {
+
         ClientRepository clientRepository = new InMemoryClientRepository();
         HotelRepository hotelRepository = new InMemoryHotelRepository();
         ReservationRepository reservationRepository = new InMemoryReservationRepository();
 
         this.authService = new AuthServicesImplementation(clientRepository);
-        this.hotelService = new HotelServiceImplementation(hotelRepository, reservationRepository, clientRepository);
+        this.hotelService = new HotelServiceImplementation(hotelRepository);
         this.reservationService = new ReservationServiceImplementation(reservationRepository, hotelRepository, clientRepository);
         createAdmin();
+
     }
 
     private void createAdmin() {
         try {
-            authService.register("Admin", "Admin", "admin@hotel.com", "admin123", true);
+            currentUser =authService.register("admin", "admin", "admin@admin.com", "admin123", true);
+            hotelService.createHotel(currentUser,"Youcode Nador", "Nador", 20, 2 );
+            hotelService.createHotel(currentUser,"Youcode Youssoufia", "Youssoufia", 20, 5 );
+            hotelService.createHotel(currentUser,"Youcode Safi", "Safi", 20, 5 );
             authService.logout();
         } catch (Exception e) {
             System.out.println("Failed To Create The Admin: " + e.getMessage());
         }
     }
 
+
     public void run() {
+
         ConsoleInput.printHeader("WELCOME TO HOTEL RESERVATION SYSTEM");
 
         while (true) {
-            try {
-                if (currentUser == null) {
-                    showAuthMenu();
-                } else {
-                    showMainMenu();
-                }
-            } catch (Exception e) {
-                ConsoleInput.printError("An error occurred: " + e.getMessage());
-                ConsoleInput.pressEnterToContinue();
+            if (currentUser == null) {
+                showAuthMenu();
+            } else {
+                showMainMenu();
             }
         }
     }
@@ -71,16 +74,21 @@ public class ConsoleUI {
         System.out.println("2. Register");
         System.out.println("3. Exit");
 
-        int choice = ConsoleInput.readInt("\nEnter your choice (1-3): ");
+        int choice = ConsoleInput.readInt("\nEnter your choice [1-3]: ");
 
         switch (choice) {
-            case 1 -> handleLogin();
-            case 2 -> handleRegister();
-            case 3 -> handleExit();
-            default -> {
-                ConsoleInput.printError("Invalid choice. Please select 1-3.");
+            case 1:
+                handleLogin();
+                break;
+            case 2:
+                handleRegister();
+                break;
+            case 3:
+                handleExit();
+                break;
+            default:
+                ConsoleInput.printError("Invalid choice: Please select a number from the menu.");
                 ConsoleInput.pressEnterToContinue();
-            }
         }
     }
 
@@ -88,6 +96,7 @@ public class ConsoleUI {
         ConsoleInput.printHeader("LOGIN");
 
         try {
+
             String email = ConsoleInput.readEmail("Email: ");
             String password = ConsoleInput.readPassword("Password: ");
 
@@ -95,7 +104,6 @@ public class ConsoleUI {
 
             if (loggedInUser.isPresent()) {
                 currentUser = loggedInUser.get();
-                currentUser.setAdmin(true);
                 ConsoleInput.printSuccess("Login successful! Welcome, " + currentUser.getFirstName() + (currentUser.isAdmin() ? "(Admin)" : "(User)" ) + "!");
                 ConsoleInput.pressEnterToContinue();
             } else {
@@ -117,15 +125,8 @@ public class ConsoleUI {
             String email = ConsoleInput.readEmail("Email: ");
             String password = ConsoleInput.readPassword("Password: ");
 
-            System.out.println("\n🔧 Account Type:");
-            System.out.println("1. Regular User");
-            System.out.println("2. Administrator");
-            int adminChoice = ConsoleInput.readInt("Choose account type (1-2): ");
+            currentUser = authService.register(firstName, lastName, email, password, false);
 
-            boolean isAdmin = (adminChoice == 2);
-
-            Client newUser = authService.register(firstName, lastName, email, password, isAdmin);
-            currentUser = newUser;
 
             ConsoleInput.printSuccess("Registration successful! Welcome, " + firstName + "!");
             ConsoleInput.pressEnterToContinue();
@@ -137,8 +138,7 @@ public class ConsoleUI {
     }
 
     private void handleExit() {
-        ConsoleInput.printHeader("GOODBYE!");
-        System.out.println("Thank you for using Hotel Reservation System!");
+        System.out.println("Thank you for using Hotel Reservation System.");
         System.exit(0);
     }
 
@@ -146,6 +146,7 @@ public class ConsoleUI {
         ConsoleInput.printHeader("MAIN MENU - Welcome " + currentUser.getFirstName() +
                                  (currentUser.isAdmin() ? " (Admin)" : " (User)"));
 
+        System.out.println("0.  Profile");
         System.out.println("HOTEL MANAGEMENT:");
         System.out.println("1.  View All Hotels");
         System.out.println("2.  Find Hotel by ID");
@@ -166,12 +167,12 @@ public class ConsoleUI {
             System.out.println("10.  View All Reservations");
         }
 
-        System.out.println("ACCOUNT:");
         System.out.println("11. Logout");
 
         int choice = ConsoleInput.readInt("Enter your choice: ");
 
         switch (choice) {
+            case 0 -> showProfile();
             case 1 -> viewAllHotels();
             case 2 -> findHotelById();
             case 3 -> {
@@ -187,9 +188,9 @@ public class ConsoleUI {
                 else ConsoleInput.printError("Admin access required.");
             }
             case 6 -> makeReservation();
-//            case 7 -> viewMyReservations();
+            case 7 -> viewMyReservations();
 //            case 8 -> updateReservation();
-//            case 9 -> cancelReservation();
+            case 9 -> cancelReservation();
             case 10 -> {
 //                if (currentUser.isAdmin()) viewAllReservations();
                 ConsoleInput.printError("Admin access required.");
@@ -197,9 +198,34 @@ public class ConsoleUI {
             case 11 -> logout();
             default -> {
                 ConsoleInput.printError("Invalid choice.");
-                ConsoleInput.pressEnterToContinue();
+//                ConsoleInput.pressEnterToContinue();
             }
         }
+    }
+
+    private void showProfile() {
+        ConsoleInput.printHeader("WELCOME TO YOUR PROFILE");
+        System.out.println(currentUser);
+        System.out.println("Update Profile");
+        System.out.println("[1]. Update Email");
+        System.out.println("[2]. Update Password");
+        System.out.println("[3]. Back to main menu");
+        int choice = ConsoleInput.readInt("Choose a number: ");
+        switch (choice) {
+            case 1 -> {
+                String email = ConsoleInput.readEmail("Enter the new Email: ");
+                authService.updateEmail(currentUser, email);
+                ConsoleInput.printSuccess("Email changed successfully");
+            }
+            case 2 -> {
+                String password = ConsoleInput.readPassword("Enter the new Password");
+                authService.updatePassword(currentUser, password);
+                ConsoleInput.printSuccess("Password Changed Successfully");
+            }
+            case 3 -> showMainMenu();
+            default -> System.out.println("Invalid choice, choose numbers from the menu");
+        }
+        ConsoleInput.pressEnterToContinue();
     }
 
     private void viewAllHotels() {
@@ -218,7 +244,6 @@ public class ConsoleUI {
         } catch (Exception e) {
             ConsoleInput.printError("Error retrieving hotels: " + e.getMessage());
         }
-
         ConsoleInput.pressEnterToContinue();
     }
 
@@ -232,7 +257,6 @@ public class ConsoleUI {
         } catch (Exception e) {
             ConsoleInput.printError("Error: " + e.getMessage());
         }
-
         ConsoleInput.pressEnterToContinue();
     }
 
@@ -251,7 +275,6 @@ public class ConsoleUI {
         } catch (Exception e) {
             ConsoleInput.printError("Error creating hotel: " + e.getMessage());
         }
-
         ConsoleInput.pressEnterToContinue();
     }
 
@@ -270,7 +293,7 @@ public class ConsoleUI {
             ConsoleInput.printError("Error updating hotel: " + e.getMessage());
         }
 
-        ConsoleInput.pressEnterToContinue();
+//        ConsoleInput.pressEnterToContinue();
     }
 
     private void deleteHotel() {
@@ -278,9 +301,9 @@ public class ConsoleUI {
 
         try {
             String hotelId = ConsoleInput.readString("Enter Hotel ID to delete: ");
-            String confirmation = ConsoleInput.readString("Type 'CONFIRM' to delete: ");
+            String confirmation = ConsoleInput.readString("Type 'DELETE' to delete: ");
 
-            if ("CONFIRM".equals(confirmation)) {
+            if ("DELETE".equals(confirmation)) {
                 hotelService.deleteHotel(currentUser, hotelId);
                 ConsoleInput.printSuccess("Hotel deleted successfully!");
             } else {
@@ -289,7 +312,6 @@ public class ConsoleUI {
         } catch (Exception e) {
             ConsoleInput.printError("Error deleting hotel: " + e.getMessage());
         }
-
         ConsoleInput.pressEnterToContinue();
     }
 
@@ -301,7 +323,7 @@ public class ConsoleUI {
             List<Hotel> hotels = hotelService.listHotels();
             if (hotels.isEmpty()) {
                 ConsoleInput.printError("No hotels available for reservation.");
-                ConsoleInput.pressEnterToContinue();
+//                ConsoleInput.pressEnterToContinue();
                 return;
             }
 
@@ -322,28 +344,27 @@ public class ConsoleUI {
             ConsoleInput.printError("Error creating reservation: " + e.getMessage());
         }
 
-        ConsoleInput.pressEnterToContinue();
+//        ConsoleInput.pressEnterToContinue();
     }
 
-//    private void viewMyReservations() {
-//        ConsoleInput.printHeader("MY RESERVATIONS");
-//
-//        try {
-//            List<Reservation> reservations = reservationService.getClientReservations(currentUser.getid());
-//
-//            if (reservations.isEmpty()) {
-//                System.out.println("You have no reservations.");
-//            } else {
-//                for (Reservation reservation : reservations) {
-//                    System.out.println(reservation);
-//                }
-//            }
-//        } catch (Exception e) {
-//            ConsoleInput.printError("Error retrieving reservations: " + e.getMessage());
-//        }
-//
-//        ConsoleInput.pressEnterToContinue();
-//    }
+    private void viewMyReservations() {
+        ConsoleInput.printHeader("MY RESERVATIONS");
+
+        try {
+            List<Reservation> reservations = reservationService.getClientReservations(currentUser.getid());
+
+            if (reservations.isEmpty()) {
+                System.out.println("You have no reservations.");
+            } else {
+                for (Reservation reservation : reservations) {
+                    System.out.println(reservation);
+                }
+            }
+        } catch (Exception e) {
+            ConsoleInput.printError("Error retrieving reservations: " + e.getMessage());
+        }
+        ConsoleInput.pressEnterToContinue();
+    }
 //
 //    private void updateReservation() {
 //        ConsoleInput.printHeader("UPDATE RESERVATION");
@@ -358,28 +379,28 @@ public class ConsoleUI {
 //            ConsoleInput.printError("Error updating reservation: " + e.getMessage());
 //        }
 //
-//        ConsoleInput.pressEnterToContinue();
+////        ConsoleInput.pressEnterToContinue();
 //    }
 //
-//    private void cancelReservation() {
-//        ConsoleInput.printHeader("CANCEL RESERVATION");
-//
-//        try {
-//            String reservationId = ConsoleInput.readString("Enter Reservation ID: ");
-//            String confirmation = ConsoleInput.readString("Type 'CONFIRM' to cancel: ");
-//
-//            if ("CONFIRM".equals(confirmation)) {
-//                reservationService.cancelReservation(currentUser, UUID.fromString(reservationId));
-//                ConsoleInput.printSuccess("Reservation cancelled successfully!");
-//            } else {
-//                System.out.println("Cancellation aborted.");
-//            }
-//        } catch (Exception e) {
-//            ConsoleInput.printError("Error cancelling reservation: " + e.getMessage());
-//        }
-//
-//        ConsoleInput.pressEnterToContinue();
-//    }
+    private void cancelReservation() {
+        ConsoleInput.printHeader("CANCEL RESERVATION");
+
+        try {
+            String reservationId = ConsoleInput.readString("Enter Reservation ID: ");
+            String confirmation = ConsoleInput.readString("Type 'CONFIRM' to cancel: ");
+
+            if ("CONFIRM".equals(confirmation)) {
+                reservationService.cancelReservation(currentUser, UUID.fromString(reservationId));
+                ConsoleInput.printSuccess("Reservation cancelled successfully!");
+            } else {
+                System.out.println("Cancellation aborted.");
+            }
+        } catch (Exception e) {
+            ConsoleInput.printError("Error cancelling reservation: " + e.getMessage());
+        }
+
+        ConsoleInput.pressEnterToContinue();
+    }
 //
 //    private void viewAllReservations() {
 //        ConsoleInput.printHeader("ALL RESERVATIONS (ADMIN VIEW)");
@@ -398,7 +419,7 @@ public class ConsoleUI {
 //            ConsoleInput.printError("Error retrieving reservations: " + e.getMessage());
 //        }
 //
-//        ConsoleInput.pressEnterToContinue();
+////        ConsoleInput.pressEnterToContinue();
 //    }
 
     private void logout() {
@@ -406,10 +427,10 @@ public class ConsoleUI {
             authService.logout();
             currentUser = null;
             ConsoleInput.printSuccess("Logged out successfully!");
-            ConsoleInput.pressEnterToContinue();
+//            ConsoleInput.pressEnterToContinue();
         } catch (Exception e) {
             ConsoleInput.printError("Error during logout: " + e.getMessage());
-            ConsoleInput.pressEnterToContinue();
+//            ConsoleInput.pressEnterToContinue();
         }
     }
 }

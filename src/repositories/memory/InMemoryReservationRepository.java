@@ -26,13 +26,16 @@ public class InMemoryReservationRepository implements ReservationRepository {
 
     @Override
     public List<Reservation> listAllReservations(){
-        return new ArrayList<>(reservations.values());
+        return reservations.values().stream().filter(reservation -> !reservation.getIsCanceled()).toList();
     }
 
     @Override
     public void delete(UUID id){
         reservations.remove(id);
     }
+
+
+
 
 
 }

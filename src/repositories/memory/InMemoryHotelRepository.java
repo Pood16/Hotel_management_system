@@ -14,7 +14,7 @@ public class InMemoryHotelRepository implements HotelRepository {
 
     @Override
     public Optional<Hotel> findById(String id){
-        return hotels.values().stream().filter(h -> h.getId().equals(id)).findFirst();
+        return Optional.ofNullable(hotels.get(id));
     };
 
     @Override

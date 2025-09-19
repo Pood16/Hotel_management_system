@@ -61,7 +61,7 @@ public class ConsoleInput {
         while (true) {
             String email = readString(userInput);
             if (InputValidator.isValidEmail(email)) {
-                return email.toLowerCase();
+                return email.trim().toLowerCase();
             }
             System.out.println("Please enter a valid email address.");
         }

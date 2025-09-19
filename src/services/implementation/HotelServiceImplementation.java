@@ -16,7 +16,7 @@ public class HotelServiceImplementation  implements HotelService {
 
 
 
-    public HotelServiceImplementation(HotelRepository hotelRepository, ReservationRepository reservationRepository, ClientRepository clientRepository) {
+    public HotelServiceImplementation(HotelRepository hotelRepository) {
         this.hotelRepository = hotelRepository;
     }
 
@@ -71,14 +71,8 @@ public class HotelServiceImplementation  implements HotelService {
 
     @Override
     public void deleteHotel(Client client, String hotelId) {
-
         if (!client.isAdmin()) {
             throw new SecurityException("You need admin permissions for this operation");
-        }
-
-        Hotel hotel = hotelRepository.findById(hotelId).get();
-        if (hotel.getAvailableRooms() > 0) {
-            throw new IllegalArgumentException("You cant delete hotels with reservations");
         }
         hotelRepository.delete(hotelId);
     }

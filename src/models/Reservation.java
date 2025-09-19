@@ -9,13 +9,15 @@ public class Reservation {
     private String hotelId;
     private UUID clientId;
     private int nights;
+    private boolean isCanceled = false;
 
-    public Reservation(Instant timestamp, String hotelId, UUID clientId, int nights) {
+    public Reservation(Instant timestamp, String hotelId, UUID clientId, int nights, boolean isCanceled) {
         this.id = UUID.randomUUID();
         this.timestamp = timestamp;
         this.hotelId = hotelId;
         this.clientId = clientId;
         this.nights = nights;
+        this.isCanceled = isCanceled;
     }
 
     public UUID getId() {
@@ -58,8 +60,16 @@ public class Reservation {
         this.nights = nights;
     }
 
+    public boolean getIsCanceled() {
+        return isCanceled;
+    }
+
+    public void setIsCanceled(boolean isCanceled) {
+        this.isCanceled = isCanceled;
+    }
+
     @Override
     public String toString() {
-        return "Reservation information : id=" + id + ", hotelId='" + hotelId + "', clientId=" + clientId +", nights=" + nights + ", date=" + timestamp;
+        return "Reservation: id=" + id + ", hotelId='" + hotelId + "', clientId=" + clientId +", nights=" + nights + ", Status: " + (isCanceled ? "Canceled" : "Active") + ", date=" + timestamp;
     }
 }

@@ -8,4 +8,6 @@ public interface AuthService {
     Client register(String firstName, String lastName, String email, String password, boolean isAdmin);
     Optional<Client> login(String email, String password);
     void logout();
+    void updatePassword(Client client, String password);
+    void updateEmail(Client client, String email);
 }
