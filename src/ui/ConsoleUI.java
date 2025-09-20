@@ -37,16 +37,16 @@ public class ConsoleUI {
         this.authService = new AuthServicesImplementation(clientRepository);
         this.hotelService = new HotelServiceImplementation(hotelRepository);
         this.reservationService = new ReservationServiceImplementation(reservationRepository, hotelRepository, clientRepository);
-        createAdmin();
+        createAdminHotels();
 
     }
 
-    private void createAdmin() {
+    private void createAdminHotels() {
         try {
             currentUser =authService.register("admin", "admin", "admin@admin.com", "admin123", true);
-            hotelService.createHotel(currentUser,"Youcode Nador", "Nador", 20, 2 );
-            hotelService.createHotel(currentUser,"Youcode Youssoufia", "Youssoufia", 20, 5 );
-            hotelService.createHotel(currentUser,"Youcode Safi", "Safi", 20, 5 );
+            hotelService.createHotel(currentUser,"Youcode Nador", "Nador", 2, 2 );
+            hotelService.createHotel(currentUser,"Youcode Youssoufia", "Youssoufia", 10, 5 );
+            hotelService.createHotel(currentUser,"Youcode Safi", "Safi", 10, 5 );
             authService.logout();
         } catch (Exception e) {
             System.out.println("Failed To Create The Admin: " + e.getMessage());
@@ -189,7 +189,7 @@ public class ConsoleUI {
             }
             case 6 -> makeReservation();
             case 7 -> viewMyReservations();
-//            case 8 -> updateReservation();
+            case 8 -> updateReservation();
             case 9 -> cancelReservation();
             case 10 -> {
 //                if (currentUser.isAdmin()) viewAllReservations();
@@ -365,23 +365,22 @@ public class ConsoleUI {
         }
         ConsoleInput.pressEnterToContinue();
     }
-//
-//    private void updateReservation() {
-//        ConsoleInput.printHeader("UPDATE RESERVATION");
-//
-//        try {
-//            String reservationId = ConsoleInput.readString("Enter Reservation ID: ");
-//            int nights = ConsoleInput.readPositiveInt("New number of nights: ");
-//
-//            reservationService.updateReservation(currentUser, UUID.fromString(reservationId), nights);
-//            ConsoleInput.printSuccess("Reservation updated successfully!");
-//        } catch (Exception e) {
-//            ConsoleInput.printError("Error updating reservation: " + e.getMessage());
-//        }
-//
-////        ConsoleInput.pressEnterToContinue();
-//    }
-//
+
+    private void updateReservation() {
+        ConsoleInput.printHeader("UPDATE RESERVATION");
+        try {
+            String reservationId = ConsoleInput.readString("Enter Reservation ID: ");
+            int nights = ConsoleInput.readPositiveInt("New number of nights: ");
+
+            reservationService.updateReservation(currentUser, UUID.fromString(reservationId), nights);
+            ConsoleInput.printSuccess("Reservation updated successfully!");
+        } catch (Exception e) {
+            ConsoleInput.printError("Error updating reservation: " + e.getMessage());
+        }
+
+        ConsoleInput.pressEnterToContinue();
+    }
+
     private void cancelReservation() {
         ConsoleInput.printHeader("CANCEL RESERVATION");
 
@@ -401,26 +400,26 @@ public class ConsoleUI {
 
         ConsoleInput.pressEnterToContinue();
     }
-//
-//    private void viewAllReservations() {
-//        ConsoleInput.printHeader("ALL RESERVATIONS (ADMIN VIEW)");
-//
-//        try {
-//            List<Reservation> reservations = reservationService.getAllReservations();
-//
-//            if (reservations.isEmpty()) {
-//                System.out.println("No reservations found.");
-//            } else {
-//                for (Reservation reservation : reservations) {
-//                    System.out.println(reservation);
-//                }
-//            }
-//        } catch (Exception e) {
-//            ConsoleInput.printError("Error retrieving reservations: " + e.getMessage());
-//        }
-//
-////        ConsoleInput.pressEnterToContinue();
-//    }
+
+    private void viewAllReservations() {
+        ConsoleInput.printHeader("ALL RESERVATIONS (ADMIN)");
+
+        try {
+            List<Reservation> reservations = reservationService.getAllReservations();
+
+            if (reservations.isEmpty()) {
+                System.out.println("No reservations found.");
+            } else {
+                for (Reservation reservation : reservations) {
+                    System.out.println(reservation);
+                }
+            }
+        } catch (Exception e) {
+            ConsoleInput.printError("Error retrieving reservations: " + e.getMessage());
+        }
+
+        ConsoleInput.pressEnterToContinue();
+    }
 
     private void logout() {
         try {

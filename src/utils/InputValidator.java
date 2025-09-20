@@ -4,10 +4,9 @@ import java.util.regex.Pattern;
 
 public class InputValidator {
     
+
+    private static final Pattern NAME_PATTERN = Pattern.compile("^[A-Za-z\\s]{2,50}$");
     private static final Pattern VALIDATE_EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
-    
-    private static final Pattern NAME_PATTERN = 
-        Pattern.compile("^[A-Za-z\\s]{2,50}$");
 
     
     public static boolean isValidEmail(String email) {
@@ -24,16 +23,7 @@ public class InputValidator {
         return name != null && NAME_PATTERN.matcher(name.trim()).matches();
     }
 
-  
-    public static boolean isPositiveInteger(int value) {
-        return value > 0;
-    }
 
-    public static boolean isPositiveDouble(double value) {
-        return value > 0.0;
-    }
-
-   
     public static boolean isNotEmpty(String value) {
         return value != null && !value.trim().isEmpty();
     }

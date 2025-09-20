@@ -117,30 +117,29 @@ public class ReservationServiceImplementation implements ReservationService {
 
     @Override
     public void updateReservation(Client client, UUID reservationId, int nights) {
-        // Validate client is connected
+
         if (!client.isConnected()) {
             throw new SecurityException("You must be logged in to update a reservation");
         }
 
-        // Validate nights
+
         if (nights <= 0) {
             throw new IllegalArgumentException("Number of nights must be greater than 0");
         }
 
-        // Find reservation
+
         Optional<Reservation> reservationOpt = reservationRepository.findById(reservationId);
         if (reservationOpt.isEmpty()) {
-            throw new IllegalArgumentException("Reservation not found: " + reservationId);
+            throw new IllegalArgumentException("Reservation not found with ID: " + reservationId);
         }
 
         Reservation reservation = reservationOpt.get();
 
-        // Check if reservation belongs to client or client is admin
-        if (!reservation.getClientId().equals(client.getid()) && !client.isAdmin()) {
+
+        if (!reservation.getClientId().equals(client.getid())) {
             throw new SecurityException("You can only update your own reservations");
         }
 
-        // Update reservation
         reservation.setNights(nights);
         reservationRepository.saveReservation(reservation);
     }
