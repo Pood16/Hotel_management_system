@@ -21,4 +21,6 @@ public interface ReservationService {
 
     void updateReservation(Client client, UUID reservationId, int nights);
 
+    void deleteReservation(UUID reservationId, UUID clientId);
+
 }

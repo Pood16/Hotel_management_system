@@ -167,12 +167,13 @@ public class ConsoleUI {
         System.out.println("7.  View My Reservations");
         System.out.println("8.  Update Reservation");
         System.out.println("9.  Cancel Reservation");
+        System.out.println("10.  Delete Reservation");
 
         if (currentUser.isAdmin()) {
-            System.out.println("10.  View All Reservations");
+            System.out.println("11.  View All Reservations");
         }
 
-        System.out.println("11. Logout");
+        System.out.println("12. Logout");
 
         int choice = ConsoleInput.readInt("Enter your choice: ");
 
@@ -196,11 +197,12 @@ public class ConsoleUI {
             case 7 -> viewMyReservations();
             case 8 -> updateReservation();
             case 9 -> cancelReservation();
-            case 10 -> {
+            case 10 -> deleteReservation();
+            case 11 -> {
                 if (currentUser.isAdmin()) viewAllReservations();
                 ConsoleInput.printErrorMessage("Admin access required.");
             }
-            case 11 -> logout();
+            case 12 -> logout();
             default -> {
                 ConsoleInput.printErrorMessage("Invalid choice.");
 //                ConsoleInput.endOfOperation();
@@ -310,8 +312,6 @@ public class ConsoleUI {
             if ("DELETE".equals(confirmation)) {
                 hotelService.deleteHotel(currentUser, hotelId);
                 ConsoleInput.printSuccessMessage("Hotel deleted successfully!");
-            } else {
-                System.out.println("Deletion cancelled.");
             }
         } catch (Exception e) {
             ConsoleInput.printErrorMessage(e.getMessage());
@@ -423,6 +423,20 @@ public class ConsoleUI {
         }
 
         ConsoleInput.endOfOperation();
+    }
+
+    private void deleteReservation(){
+        ConsoleInput.printHeader("DELETE RESERVATION:");
+     try{
+         String reservationId = ConsoleInput.readString("Enter Reservation ID:");
+         String confirmDelete = ConsoleInput.readString("Type 'DELETE' to confirm the action");
+         if ("DELETE".equals(confirmDelete)) {
+             reservationService.deleteReservation(UUID.fromString(reservationId), currentUser.getid());
+             ConsoleInput.printSuccessMessage("Reservation DELETED successfully");
+         }
+     }catch(IllegalArgumentException e){
+         ConsoleInput.printErrorMessage(e.getMessage());
+     }
     }
 
     private void logout() {

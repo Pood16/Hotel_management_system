@@ -142,5 +142,22 @@ public class ReservationServiceImplementation implements ReservationService {
         reservationRepository.saveReservation(reservation);
     }
 
+    @Override
+    public void deleteReservation(UUID reservationId, UUID clientId) {
+        if (reservationRepository.findById(reservationId).isEmpty()) {
+            throw new IllegalArgumentException("No RESERVATION found with ID#" + reservationId);
+        }
+        if (reservationRepository.findById(reservationId).isPresent()) {
+            Reservation optionalReservation = reservationRepository.findById(reservationId).get();
+            if (optionalReservation.getClientId().equals(clientId)) {
+                reservationRepository.delete(reservationId);
+            } else {
+                throw new IllegalArgumentException("You are not allowed to DELETE this reservation.");
+            }
+        }
+    }
+
+
+
 
 }
