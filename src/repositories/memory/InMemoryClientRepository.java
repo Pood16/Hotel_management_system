@@ -1,11 +1,15 @@
 package repositories.memory;
-import java.util.*;
-
 import models.Client;
 import repositories.ClientRepository;
+import java.util.Map;
+import java.util.UUID;
+import java.util.Optional;
+import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InMemoryClientRepository implements ClientRepository {
-    Map<UUID, Client> users = new HashMap<>();
+    private Map<UUID, Client> users = new HashMap<>();
     
     @Override
     public void saveUser(Client client){

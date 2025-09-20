@@ -24,6 +24,8 @@ public class ReservationServiceImplementation implements ReservationService {
         this.clientRepository = clientRepository;
     }
 
+    // TODO:FIX THE VUE ALL RESERVATIONS PERMISSION
+
     @Override
     public Reservation createReservation(Client client, String hotelId, int nights) {
 
@@ -54,6 +56,7 @@ public class ReservationServiceImplementation implements ReservationService {
         Reservation reservation = new Reservation(Instant.now(), hotelId, client.getid(), nights, false);
 
         hotel.setAvailableRooms(hotel.getAvailableRooms() - 1);
+        hotel.setHasReservation(true);
         hotelRepository.saveHotel(hotel);
         reservationRepository.saveReservation(reservation);
         return reservation;

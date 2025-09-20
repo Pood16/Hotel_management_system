@@ -11,6 +11,8 @@ public class Reservation {
     private int nights;
     private boolean isCanceled = false;
 
+    // TODO:DISPLAY RESERVATIONS IN A TABLE FORMAT
+
     public Reservation(Instant timestamp, String hotelId, UUID clientId, int nights, boolean isCanceled) {
         this.id = UUID.randomUUID();
         this.timestamp = timestamp;

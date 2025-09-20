@@ -1,13 +1,18 @@
 package repositories.memory;
 
 import models.Reservation;
+import repositories.ClientRepository;
 import repositories.ReservationRepository;
+import java.util.Map;
+import java.util.UUID;
+import java.util.Optional;
+import java.util.HashMap;
+import java.util.List;
 
-import java.util.*;
 
 
 public class InMemoryReservationRepository implements ReservationRepository {
-    Map<UUID, Reservation> reservations = new HashMap<>();
+    private Map<UUID, Reservation> reservations = new HashMap<>();
 
     @Override
     public void saveReservation(Reservation reservation){

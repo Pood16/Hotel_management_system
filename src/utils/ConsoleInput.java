@@ -22,6 +22,8 @@ public class ConsoleInput {
         }
     }
 
+    
+
 
     public static int readPositiveInt(String userInput) {
         while (true) {
@@ -38,8 +40,7 @@ public class ConsoleInput {
         while (true) {
             try {
                 System.out.print(userInput);
-                double value = Double.parseDouble(scanner.nextLine().trim());
-                return value;
+                return Double.parseDouble(scanner.nextLine().trim());
             } catch (NumberFormatException e) {
                 System.out.println("Please enter a valid decimal number.");
             }
@@ -90,26 +91,25 @@ public class ConsoleInput {
     }
 
   
-    public static void pressEnterToContinue() {
-        System.out.print("\nPress Enter to continue...");
+    public static void endOfOperation() {
+        System.out.print("\nPAUSE:PRESS ENTER TO CONTINUE...");
         scanner.nextLine();
     }
 
  
     
-    public static void printHeader(String title) {
-        System.out.println("\n" + "=".repeat(50));
-        System.out.println(title);
-        System.out.println("=".repeat(50));
+    public static void printHeader(String header) {
+        System.out.println("\n" + "=".repeat(20));
+        System.out.println(header);
+        System.out.println("=".repeat(20));
     }
 
 
-    public static void printSuccess(String message) {
-        System.out.println("Success: " + message);
+    public static void printSuccessMessage(String message) {
+        System.out.println("Success Operation: " + message);
     }
 
-    public static void printError(String message) {
-        System.out.println("Error: " + message);
+    public static void printErrorMessage(String message) {
+        System.out.println("Error Operation: " + message);
     }
-
 }

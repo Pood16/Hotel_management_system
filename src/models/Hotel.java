@@ -3,22 +3,22 @@ package models;
 import java.util.UUID;
 
 public class Hotel {
-    private String id;
+    private final String id;
     private String name;
     private String address;
     private int availableRooms;
     private double rate;
-    private boolean isAvailable = false;
+    private boolean isAvailable;
+    private boolean hasReservation;
 
-
-
-    public Hotel(String name, String address, int availableRooms, boolean isAvailable, double rate ){
+    public Hotel(String name, String address, int availableRooms, boolean isAvailable, double rate, boolean hasReservation ){
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.address = address;
         this.availableRooms = availableRooms;
         this.isAvailable = isAvailable;
         this.rate = rate;
+        this.hasReservation = hasReservation;
     };
 
     public String getId() {
@@ -63,6 +63,14 @@ public class Hotel {
 
     public void setAvailable(boolean isAvailable) {
         this.isAvailable = isAvailable;
+    }
+
+    public boolean getHasReservation() {
+        return hasReservation;
+    }
+
+    public void setHasReservation(boolean hasReservation) {
+        this.hasReservation = hasReservation;
     }
 
     @Override

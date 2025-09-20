@@ -1,11 +1,17 @@
 package repositories.memory;
-import java.util.*;
+
 
 import models.Hotel;
 import repositories.HotelRepository;
 
+import java.util.Map;
+import java.util.Optional;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+
 public class InMemoryHotelRepository implements HotelRepository {
-    Map<String, Hotel> hotels = new HashMap<>();
+    private Map<String, Hotel> hotels = new HashMap<>();
 
     @Override
     public void saveHotel(Hotel hotel){

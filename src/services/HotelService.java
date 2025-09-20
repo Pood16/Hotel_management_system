@@ -4,7 +4,6 @@ import models.Client;
 import models.Hotel;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface HotelService {
 

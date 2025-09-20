@@ -2,11 +2,8 @@ package services.implementation;
 
 import models.Client;
 import models.Hotel;
-import repositories.ClientRepository;
 import repositories.HotelRepository;
-import repositories.ReservationRepository;
 import services.HotelService;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +16,7 @@ public class HotelServiceImplementation  implements HotelService {
     public HotelServiceImplementation(HotelRepository hotelRepository) {
         this.hotelRepository = hotelRepository;
     }
+
 
     @Override
     public Hotel createHotel(Client client, String name, String address, int availableRooms, double rate) {
@@ -35,8 +33,8 @@ public class HotelServiceImplementation  implements HotelService {
                 address,
                 availableRooms,
                 true,
-                rate
-
+                rate,
+                false
         );
         hotelRepository.saveHotel(hotel);
         return hotel;
@@ -73,6 +71,13 @@ public class HotelServiceImplementation  implements HotelService {
     public void deleteHotel(Client client, String hotelId) {
         if (!client.isAdmin()) {
             throw new SecurityException("You need admin permissions for this operation");
+        }
+        Optional<Hotel> optionalHotel = hotelRepository.findById(hotelId);
+        if (optionalHotel.isPresent()) {
+            Hotel hotel = optionalHotel.get();
+            if (hotel.getHasReservation()) {
+                throw new IllegalArgumentException("You can't DELETE hotel with reservations");
+            }
         }
         hotelRepository.delete(hotelId);
     }

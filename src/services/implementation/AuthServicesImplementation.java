@@ -3,8 +3,6 @@ package services.implementation;
 import models.Client;
 import repositories.ClientRepository;
 import services.AuthService;
-
-
 import java.util.Optional;
 
 
@@ -19,6 +17,7 @@ public class AuthServicesImplementation implements AuthService {
     }
 
 
+  
     @Override
     public Client register(String firstName, String lastName, String email, String password, boolean isAdmin){
 
@@ -28,7 +27,7 @@ public class AuthServicesImplementation implements AuthService {
 
         Client client = new Client(firstName, lastName, email, password, true, isAdmin);
         clientRepository.saveUser(client);
-        this.currentClient = client;
+        currentClient = client;
         return client;
     }
 
@@ -40,13 +39,16 @@ public class AuthServicesImplementation implements AuthService {
             client.setConnected(true);
             return client;
         });
-
     }
 
     @Override
-    public void logout(){
+    public Client logout(){
+        
         Optional<Client> target = clientRepository.findById(currentClient.getid());
-        target.ifPresent(client -> client.setConnected(false));
+        target.ifPresent(client -> {
+            client.setConnected(false);
+        });
+            return null;
     }
 
     public void updatePassword(Client client, String password) {
