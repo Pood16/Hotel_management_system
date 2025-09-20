@@ -75,6 +75,6 @@ public class Hotel {
 
     @Override
     public String toString() {
-        return "Hotel{id='" + id + "', name='" + name + "', availableRooms=" + availableRooms + ", rating=" + rate + "}";
+        return "#ID: " + id +" |Hotel Name: " + name +" |Address: " + address +" |Available Rooms: " + availableRooms +" |Rate: " + rate +" |Status: " + (isAvailable ? "Available" : "Unavailable") +" |Has Reservation: " + (hasReservation ? "Yes" : "No");
     }
 }

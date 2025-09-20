@@ -13,6 +13,7 @@ public class HotelServiceImplementation  implements HotelService {
 
 
 
+
     public HotelServiceImplementation(HotelRepository hotelRepository) {
         this.hotelRepository = hotelRepository;
     }
@@ -73,13 +74,19 @@ public class HotelServiceImplementation  implements HotelService {
             throw new SecurityException("You need admin permissions for this operation");
         }
         Optional<Hotel> optionalHotel = hotelRepository.findById(hotelId);
+
         if (optionalHotel.isPresent()) {
             Hotel hotel = optionalHotel.get();
             if (hotel.getHasReservation()) {
                 throw new IllegalArgumentException("You can't DELETE hotel with reservations");
             }
+            hotelRepository.delete(hotelId);
         }
-        hotelRepository.delete(hotelId);
+
+        if (optionalHotel.isEmpty()) {
+            throw new IllegalArgumentException("No Hotels Found with ID: " + hotelId);
+        }
+
     }
 
 

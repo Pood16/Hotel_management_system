@@ -79,11 +79,9 @@ public class Client {
         this.isAdmin = isAdmin;
     }
 
-   @Override
-   public String toString() {
-       return "Id: " + id + "\n" +
-               "Full Name: " + firstName + " " + lastName + "\n" +
-               "Email: " + email;
-   }
+@Override
+public String toString() {
+    return "#ID: " + id + " |First Name: " + firstName + " |Last Name: " + lastName + " |Email: " + email + " |Connected: " + (isConnected ? "Yes" : "No") + " |Admin: " + (isAdmin ? "Yes" : "No");
+}
 
 }

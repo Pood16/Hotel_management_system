@@ -16,15 +16,14 @@ public class ReservationServiceImplementation implements ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final HotelRepository hotelRepository;
-    private final ClientRepository clientRepository;
 
-    public ReservationServiceImplementation(ReservationRepository reservationRepository, HotelRepository hotelRepository, ClientRepository clientRepository) {
+
+    public ReservationServiceImplementation(ReservationRepository reservationRepository, HotelRepository hotelRepository) {
         this.reservationRepository = reservationRepository;
         this.hotelRepository = hotelRepository;
-        this.clientRepository = clientRepository;
     }
 
-    // TODO:FIX THE VUE ALL RESERVATIONS PERMISSION
+
 
     @Override
     public Reservation createReservation(Client client, String hotelId, int nights) {
@@ -110,10 +109,6 @@ public class ReservationServiceImplementation implements ReservationService {
 
     @Override
     public Reservation findReservationById(UUID reservationId) {
-        if (reservationId == null) {
-            throw new IllegalArgumentException("Reservation ID cannot be null");
-        }
-
         return reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new IllegalArgumentException("Reservation not found: " + reservationId));
     }
@@ -146,4 +141,6 @@ public class ReservationServiceImplementation implements ReservationService {
         reservation.setNights(nights);
         reservationRepository.saveReservation(reservation);
     }
+
+
 }

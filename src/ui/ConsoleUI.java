@@ -41,7 +41,7 @@ public class ConsoleUI {
 
         this.authService = new AuthServicesImplementation(clientRepository);
         this.hotelService = new HotelServiceImplementation(hotelRepository);
-        this.reservationService = new ReservationServiceImplementation(reservationRepository, hotelRepository, clientRepository);
+        this.reservationService = new ReservationServiceImplementation(reservationRepository, hotelRepository);
         createAdminHotels();
 
     }

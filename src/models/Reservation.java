@@ -11,7 +11,6 @@ public class Reservation {
     private int nights;
     private boolean isCanceled = false;
 
-    // TODO:DISPLAY RESERVATIONS IN A TABLE FORMAT
 
     public Reservation(Instant timestamp, String hotelId, UUID clientId, int nights, boolean isCanceled) {
         this.id = UUID.randomUUID();
@@ -72,6 +71,6 @@ public class Reservation {
 
     @Override
     public String toString() {
-        return "Reservation: id=" + id + ", hotelId='" + hotelId + "', clientId=" + clientId +", nights=" + nights + ", Status: " + (isCanceled ? "Canceled" : "Active") + ", date=" + timestamp;
+        return "#ID: " + id + " |Hotel ID: " + hotelId + " |Client ID:" + clientId +"|Nights: " + nights + " |Status: " + (isCanceled ? "Canceled" : "Active") + " |date=" + timestamp;
     }
 }

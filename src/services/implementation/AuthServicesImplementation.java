@@ -54,6 +54,8 @@ public class AuthServicesImplementation implements AuthService {
     public void updatePassword(Client client, String password) {
         client.setPassword(password);
     }
+
+
     public void updateEmail(Client client, String email) {
         client.setEmail(email);
     }

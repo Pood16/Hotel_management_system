@@ -20,4 +20,5 @@ public interface ReservationService {
     Reservation findReservationById(UUID reservationId);
 
     void updateReservation(Client client, UUID reservationId, int nights);
+
 }
